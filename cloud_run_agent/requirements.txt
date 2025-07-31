@@ -1,0 +1,4 @@
+# requirements.txt
+google-adk[a2a]>=1.8.0
+fastapi
+uvicorn
