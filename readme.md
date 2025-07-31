@@ -63,7 +63,7 @@ Create a service account that this Cloud Run service will run as.
 
 gcloud iam service-accounts create comedian-agent-sa \    
 --display-name="Professional Comedian Agent SA" \    
---project=""   `
+--project=<PROJECT_ID>   `
 
 
 #### 1.3: Deploy to Cloud Run
@@ -75,7 +75,7 @@ gcloud run deploy professional-comedian-agent \
 --source . \      
 --platform managed \      
 --region us-central1 \      
---project "" \      
+--project <PROJECT_ID> \      
 --no-allow-unauthenticated \      
 --service-account "comedian-agent-sa@.iam.gserviceaccount.com" \      
 --set-env-vars="GOOGLE_GENAI_USE_VERTEXAI=true,GOOGLE_CLOUD_PROJECT=,GOOGLE_CLOUD_LOCATION=us-central1,GOOGLE_API_KEY=,SEARCH_ENGINE_ID="   `
@@ -93,18 +93,18 @@ This is the identity that the Classic Joke Agent will _impersonate_.
 
 gcloud iam service-accounts create classic-joke-caller-sa \    
 --display-name="Classic Joke Caller SA" \    
---project=""   `
+--project=<PROJECT_ID>   `
 
 
 #### 2.2: Grant IAM Permissions
 
-1.  gcloud iam service-accounts add-iam-policy-binding \\ classic-joke-caller-sa@.iam.gserviceaccount.com \\ --member="serviceAccount:service-@gcp-sa-aiplatform-re.iam.gserviceaccount.com" \\ --role="roles/iam.serviceAccountTokenCreator" \\ --project=""
+1.  gcloud iam service-accounts add-iam-policy-binding \\ classic-joke-caller-sa@.iam.gserviceaccount.com \\ --member="serviceAccount:service-@gcp-sa-aiplatform-re.iam.gserviceaccount.com" \\ --role="roles/iam.serviceAccountTokenCreator" \\ --project=<PROJECT_ID>
     
     *   Agent Engine runs as a special Google-managed service account. We need to grant it permission to create tokens for our classic-joke-caller-sa.
         
     *   Replace  with your actual project number (e.g., 123456789).
         
-2. gcloud run services add-iam-policy-binding professional-comedian-agent \\ --region=us-central1 \\ --project="" \\ --member="serviceAccount:classic-joke-caller-sa@.iam.gserviceaccount.com" \\ --role="roles/run.invoker"
+2. gcloud run services add-iam-policy-binding professional-comedian-agent \\ --region=us-central1 \\ --project=<PROJECT_ID> \\ --member="serviceAccount:classic-joke-caller-sa@.iam.gserviceaccount.com" \\ --role="roles/run.invoker"
     
     *   Give our classic-joke-caller-sa permission to call the professional-comedian-agent.
         
@@ -123,7 +123,7 @@ You can now deploy one of the two frontend agents to test the different communic
     
 2.  **Configure:** Open the agent.py file and update the PRIVATE\_CLOUD\_RUN\_URL and TARGET\_SERVICE\_ACCOUNT variables with your specific values.
     
-3.  adk deploy agent\_engine \\ --project="" \\ --region="us-central1" \\ --staging\_bucket="gs://" \\ --display\_name="classic-joke-agent-iam" \\ .
+3.  adk deploy agent\_engine \\ --project=<PROJECT_ID> \\ --region="us-central1" \\ --staging\_bucket=gs://<GCS_BUCKET> \\ --display\_name="classic-joke-agent-iam" \\ .
     
 
 #### Testing Scenario 2: IAP Authentication
@@ -134,7 +134,7 @@ This requires additional setup of an External HTTPS Load Balancer. See the offic
     
 2.  **Configure:** Open the agent.py file and update the LOAD\_BALANCER\_URL, TARGET\_SERVICE\_ACCOUNT, and IAP\_CLIENT\_ID variables.
     
-3.  adk deploy agent\_engine \\ --project="" \\ --region="us-central1" \\ --staging\_bucket="gs://" \\ --display\_name="classic-joke-agent-iap" \\ .
+3.  adk deploy agent\_engine \\ --project=<PROJECT_ID> \\ --region="us-central1" \\ --staging\_bucket=gs://<GCS_BUCKET> \\ --display\_name="classic-joke-agent-iap" \\ .
     
 
 ### Part 4: Register the Agent in AgentSpace
