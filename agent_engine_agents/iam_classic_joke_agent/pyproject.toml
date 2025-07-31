@@ -1,0 +1,8 @@
+[project]
+name = "classic_joke_agent_iam"
+version = "0.1.0"
+dependencies = [
+    "google-adk",
+    "requests",
+    "google-auth"
+]
